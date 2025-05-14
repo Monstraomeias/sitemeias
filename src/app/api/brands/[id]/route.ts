@@ -1,36 +1,42 @@
-// src/app/api/brands/[id]/route.ts
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
-  const { id } = context.params
+export async function GET(request: Request) {
+  const { pathname } = new URL(request.url)
+
+  // pathname será algo como /api/brands/123
+  const id = pathname.split('/').pop()  // pega o último pedaço da URL
+
+  if (!id) {
+    return NextResponse.json({ error: 'ID não fornecido' }, { status: 400 })
+  }
 
   try {
+    // Buscar a marca com o id
     const brand = await prisma.brand.findUnique({
       where: { id },
-      include: {
-        products: true,
-      },
+      include: { products: true }
     })
 
     if (!brand) {
       return NextResponse.json({ error: 'Marca não encontrada' }, { status: 404 })
     }
 
+    const productCount = brand.products.length
+
     return NextResponse.json({
       id: brand.id,
       name: brand.name,
       createdAt: brand.createdAt,
-      productCount: brand.products.length,
+      productCount,
     })
   } catch (err) {
     console.error(err)
     return NextResponse.json({ error: 'Erro ao buscar marca' }, { status: 500 })
   }
 }
+
+
 
 
 
