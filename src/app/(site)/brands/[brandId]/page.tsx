@@ -1,19 +1,15 @@
-// app/brands/[brandId]/page.tsx
+// src/app/(site)/brands/[brandId]/page.tsx
 import { notFound } from 'next/navigation'
 
-// Certifique-se de que o tipo de BrandPageProps seja corretamente importado do Next.js
-interface BrandPageProps {
-  params: { 
-    brandId: string; // 'brandId' será a chave dinâmica para o parâmetro da URL
-  };
+type Props = {
+  params: {
+    brandId: string
+  }
 }
 
-// Função assíncrona que usa os parâmetros dinâmicos
-export default async function BrandPage({ params }: BrandPageProps) {
-  // Obtendo o 'brandId' dos parâmetros da URL
-  const { brandId } = params;
+export default async function BrandPage({ params }: Props) {
+  const { brandId } = params
 
-  // Realizando o fetch dos dados da marca
   const res = await fetch(`http://localhost:3000/api/brands/${brandId}`, {
     cache: 'no-store',
   })
@@ -31,6 +27,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
     </div>
   )
 }
+
 
 
 
