@@ -1,13 +1,7 @@
 // src/app/(site)/brands/[brandId]/page.tsx
 import { notFound } from 'next/navigation'
 
-type Props = {
-  params: {
-    brandId: string
-  }
-}
-
-export default async function BrandPage({ params }: Props) {
+export default async function BrandPage({ params }: any) {
   const { brandId } = params
 
   const res = await fetch(`http://localhost:3000/api/brands/${brandId}`, {
@@ -27,6 +21,7 @@ export default async function BrandPage({ params }: Props) {
     </div>
   )
 }
+
 
 
 
