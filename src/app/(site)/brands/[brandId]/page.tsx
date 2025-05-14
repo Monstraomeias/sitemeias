@@ -1,3 +1,4 @@
+// app/brands/[brandId]/page.tsx
 import { notFound } from 'next/navigation'
 
 interface BrandPageProps {
@@ -7,10 +8,12 @@ interface BrandPageProps {
 }
 
 export default async function BrandPage({ params }: BrandPageProps) {
+  // Fetch the brand data based on the brandId from params
   const res = await fetch(`http://localhost:3000/api/brands/${params.brandId}`, {
     cache: 'no-store',
   })
 
+  // If the request fails, return a "not found" page
   if (!res.ok) return notFound()
 
   const brand = await res.json()
