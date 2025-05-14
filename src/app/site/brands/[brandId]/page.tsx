@@ -1,20 +1,6 @@
-// src/app/site/brands/[brandId]/page.tsx
 import { notFound } from 'next/navigation'
 
-type BrandPageProps = {
-  params: {
-    brandId: string
-  }
-}
-
-type Brand = {
-  id: string
-  name: string
-  createdAt: string
-  productCount?: number
-}
-
-export default async function BrandPage({ params }: BrandPageProps) {
+export default async function BrandPage({ params }: { params: { brandId: string } }) {
   const { brandId } = params
 
   const res = await fetch(`http://localhost:3000/api/brands/${brandId}`, {
@@ -25,7 +11,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
     return notFound()
   }
 
-  const brand: Brand = await res.json()
+  const brand = await res.json()
 
   return (
     <div className="px-[140px] mt-8">
@@ -36,6 +22,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
     </div>
   )
 }
+
 
 
 
