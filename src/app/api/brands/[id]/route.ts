@@ -2,12 +2,14 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, context: { params: { id: string } }) {
+  const { id } = context.params
+
   try {
     const brand = await prisma.brand.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
-        products: true, // você pode trocar isso por count abaixo
+        products: true,
       },
     })
 
@@ -21,10 +23,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       id: brand.id,
       name: brand.name,
       createdAt: brand.createdAt,
-      productCount, // retorna a contagem de produtos
+      productCount,
     })
   } catch (err) {
     console.error(err)
     return NextResponse.json({ error: 'Erro ao buscar marca' }, { status: 500 })
   }
 }
+
